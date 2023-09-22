@@ -1,0 +1,15 @@
+version: "3"
+
+services:
+  goapp:
+    image: goapp
+    container_name: goapp
+    restart: always
+    ports:
+      - 1234:1234
+    networks:
+      - services
+
+networks:
+  services:
+    driver: bridge
