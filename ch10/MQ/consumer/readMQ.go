@@ -21,11 +21,10 @@ func main() {
 	}
 	defer ch.Close()
 
+	msgs, err := ch.Consume("Go", "", true, false, false, false, nil)
 	if err != nil {
 		fmt.Println(err)
 	}
-
-	msgs, err := ch.Consume("Go", "", true, false, false, false, nil)
 
 	forever := make(chan bool)
 	go func() {
