@@ -20,7 +20,10 @@ func generateBytes(n int64) ([]byte, error) {
 
 func generatePass(s int64) (string, error) {
 	b, err := generateBytes(s)
-	return base64.URLEncoding.EncodeToString(b), err
+	if err != nil {
+		return "", err
+	}
+	return base64.URLEncoding.EncodeToString(b), nil
 }
 
 func main() {
