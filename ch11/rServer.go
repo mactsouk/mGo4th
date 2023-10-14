@@ -17,7 +17,6 @@ type User struct {
 
 var user User
 
-// PORT is where the web server listens to
 var PORT = ":1234"
 
 // DATA is the map that holds User records
