@@ -39,10 +39,13 @@ func main() {
 	}
 
 	switch len(arguments) {
-	case 1, 2, 3, 4:
+	case 0:
 		fmt.Println("Usage: ./randomNumbers MIN MAX TOTAL SEED")
+		fmt.Println("Using all default values!")
+	case 1, 2, 3:
+		fmt.Println("Using some default values!")
 	default:
-		fmt.Println("Using default values!")
+		fmt.Println("Using given values!")
 	}
 
 	rand.Seed(SEED)
