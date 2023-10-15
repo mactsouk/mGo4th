@@ -18,62 +18,29 @@ func main() {
 	TOTAL := 100
 	SEED := time.Now().Unix()
 
-	arguments := os.Args
-	switch len(arguments) {
-	case 2:
-		fmt.Println("Usage: ./randomNumbers MIN MAX TOTAL SEED")
-		t, err := strconv.Atoi(arguments[1])
+	arguments := os.Args[1:]
+
+	for i, arg := range arguments {
+		t, err := strconv.Atoi(arg)
 		if err != nil {
+			continue
+		}
+		switch i {
+		case 0:
 			MIN = t
 			MAX = MIN + 100
-		}
-	case 3:
-		fmt.Println("Usage: ./randomNumbers MIN MAX TOTAL SEED")
-		t, err := strconv.Atoi(arguments[1])
-		if err == nil {
-			MIN = t
-		}
-		t, err = strconv.Atoi(arguments[2])
-		if err == nil {
+		case 1:
 			MAX = t
-		} else {
-			MAX = MIN + 100
-		}
-	case 4:
-		fmt.Println("Usage: ./randomNumbers MIN MAX TOTAL SEED")
-		t, err := strconv.Atoi(arguments[1])
-		if err == nil {
-			MIN = t
-		}
-		t, err = strconv.Atoi(arguments[2])
-		if err == nil {
-			MAX = t
-		} else {
-			MAX = MIN + 100
-		}
-		t, err = strconv.Atoi(arguments[3])
-		if err == nil {
+		case 2:
 			TOTAL = t
+		case 3:
+			SEED = int64(t)
 		}
-	case 5:
-		t, err := strconv.Atoi(arguments[1])
-		if err == nil {
-			MIN = t
-		}
-		t, err = strconv.Atoi(arguments[2])
-		if err == nil {
-			MAX = t
-		} else {
-			MAX = MIN + 100
-		}
-		t, err = strconv.Atoi(arguments[3])
-		if err == nil {
-			TOTAL = t
-		}
-		temp, err := strconv.ParseInt(arguments[4], 10, 64)
-		if err == nil {
-			SEED = temp
-		}
+	}
+
+	switch len(arguments) {
+	case 1, 2, 3, 4:
+		fmt.Println("Usage: ./randomNumbers MIN MAX TOTAL SEED")
 	default:
 		fmt.Println("Using default values!")
 	}
