@@ -1,11 +1,11 @@
-/*
-Copyright © 2023 Mihalis Tsoukalos <mihalistsoukalos@gmail.com>
-
-*/
 package cmd
 
 import (
+	"bytes"
+	"encoding/json"
 	"fmt"
+	"net/http"
+	"time"
 
 	"github.com/spf13/cobra"
 )
@@ -13,28 +13,64 @@ import (
 // getidCmd represents the getid command
 var getidCmd = &cobra.Command{
 	Use:   "getid",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+	Short: "Returns User ID, given a username",
+	Long: `This command returns the User ID of a user, given
+	their username.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("getid called")
+		endpoint := "/getid"
+		user := User{Username: username, Password: password}
+
+		// Convert data string to User Structure
+		var u2 User
+		err := json.Unmarshal([]byte(data), &u2)
+		if err != nil {
+			fmt.Println("Unmarshal:", err)
+			return
+		}
+
+		if u2.Username == "" {
+			fmt.Println("Empty username!")
+			return
+		}
+
+		// bytes.Buffer is both a Reader and a Writer
+		buf := new(bytes.Buffer)
+		err = user.ToJSON(buf)
+		if err != nil {
+			fmt.Println("JSON:", err)
+			return
+		}
+
+		URL := SERVER + PORT + endpoint + "/" + u2.Username
+		req, err := http.NewRequest(http.MethodGet, URL, buf)
+		if err != nil {
+			fmt.Println("GetAll – Error in req: ", err)
+			return
+		}
+		req.Header.Set("Content-Type", "application/json")
+
+		c := &http.Client{
+			Timeout: 15 * time.Second,
+		}
+
+		resp, err := c.Do(req)
+		if err != nil {
+			fmt.Println("Do:", err)
+			return
+		}
+
+		if resp.StatusCode != http.StatusOK {
+			fmt.Println(resp)
+			return
+		}
+
+		var Returned = User{}
+		SliceFromJSON(&Returned, resp.Body)
+
+		fmt.Println("User", Returned.Username, "has ID:", Returned.ID)
 	},
 }
 
 func init() {
 	rootCmd.AddCommand(getidCmd)
-
-	// Here you will define your flags and configuration settings.
-
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// getidCmd.PersistentFlags().String("foo", "", "A help for foo")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// getidCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }

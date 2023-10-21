@@ -1,40 +1,72 @@
-/*
-Copyright © 2023 Mihalis Tsoukalos <mihalistsoukalos@gmail.com>
-
-*/
 package cmd
 
 import (
+	"bytes"
+	"encoding/json"
 	"fmt"
+	"net/http"
+	"time"
 
 	"github.com/spf13/cobra"
 )
 
-// updateCmd represents the update command
 var updateCmd = &cobra.Command{
 	Use:   "update",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+	Short: "Update user data",
+	Long:  `Update the user data.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("update called")
+		endpoint := "/update"
+
+		// User issuing the command
+		u1 := User{Username: username, Password: password}
+
+		// Convert data string to User Structure
+		// User to be updated
+		var u2 User
+		err := json.Unmarshal([]byte(data), &u2)
+		if err != nil {
+			fmt.Println("Unmarshal:", err)
+			return
+		}
+
+		users := []User{}
+		users = append(users, u1)
+		users = append(users, u2)
+
+		// bytes.Buffer is both a Reader and a Writer
+		buf := new(bytes.Buffer)
+		err = SliceToJSON(users, buf)
+		if err != nil {
+			fmt.Println("JSON:", err)
+			return
+		}
+
+		req, err := http.NewRequest(http.MethodPut, SERVER+PORT+endpoint, buf)
+		if err != nil {
+			fmt.Println("GetAll – Error in req: ", err)
+			return
+		}
+		req.Header.Set("Content-Type", "application/json")
+
+		c := &http.Client{
+			Timeout: 15 * time.Second,
+		}
+
+		resp, err := c.Do(req)
+		if err != nil {
+			fmt.Println("Do:", err)
+			return
+		}
+
+		if resp.StatusCode != http.StatusOK {
+			fmt.Println("Status code:", resp.Status)
+		} else {
+			fmt.Println("User", u2.Username, "updated.")
+		}
+
 	},
 }
 
 func init() {
 	rootCmd.AddCommand(updateCmd)
-
-	// Here you will define your flags and configuration settings.
-
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// updateCmd.PersistentFlags().String("foo", "", "A help for foo")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// updateCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }

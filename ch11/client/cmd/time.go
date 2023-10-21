@@ -1,40 +1,46 @@
-/*
-Copyright © 2023 Mihalis Tsoukalos <mihalistsoukalos@gmail.com>
-
-*/
 package cmd
 
 import (
 	"fmt"
+	"io"
+	"net/http"
+	"time"
 
 	"github.com/spf13/cobra"
 )
 
-// timeCmd represents the time command
 var timeCmd = &cobra.Command{
 	Use:   "time",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+	Short: "Get the time from the RESTful server",
+	Long:  `This command mainly exists for making sure that the server works.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("time called")
+		req, err := http.NewRequest("GET", SERVER+PORT+"/time", nil)
+		if err != nil {
+			fmt.Println("Timefunction – Error in req: ", err)
+			return
+		}
+
+		c := &http.Client{
+			Timeout: 15 * time.Second,
+		}
+
+		resp, err := c.Do(req)
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+
+		if resp == nil || (resp.StatusCode == http.StatusNotFound) {
+			fmt.Println(resp)
+			return
+		}
+		defer resp.Body.Close()
+
+		data, _ := io.ReadAll(resp.Body)
+		fmt.Print(string(data))
 	},
 }
 
 func init() {
 	rootCmd.AddCommand(timeCmd)
-
-	// Here you will define your flags and configuration settings.
-
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// timeCmd.PersistentFlags().String("foo", "", "A help for foo")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// timeCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }
