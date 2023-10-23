@@ -10,7 +10,6 @@ import (
 	"time"
 
 	"github.com/gorilla/mux"
-	"github.com/mactsouk/restdb"
 )
 
 type User struct {
@@ -77,7 +76,7 @@ func AddHandler(rw http.ResponseWriter, r *http.Request) {
 	// We read two structures as an array:
 	// 1. The user issuing the command
 	// 2. The user to be added
-	var users = []restdb.User{}
+	var users = []User{}
 	err = json.Unmarshal(d, &users)
 	if err != nil {
 		log.Println(err)
@@ -87,13 +86,13 @@ func AddHandler(rw http.ResponseWriter, r *http.Request) {
 
 	log.Println(users)
 
-	if !restdb.IsUserAdmin(users[0]) {
+	if !IsUserAdmin(users[0]) {
 		log.Println("Command issued by non-admin user:", users[0].Username)
 		rw.WriteHeader(http.StatusBadRequest)
 		return
 	}
 
-	result := restdb.InsertUser(users[1])
+	result := InsertUser(users[1])
 	if !result {
 		rw.WriteHeader(http.StatusBadRequest)
 	}
@@ -111,7 +110,7 @@ func DeleteHandler(rw http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	var user = restdb.User{}
+	var user = User{}
 	err := user.FromJSON(r.Body)
 	if err != nil {
 		log.Println(err)
@@ -119,7 +118,7 @@ func DeleteHandler(rw http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if !restdb.IsUserAdmin(user) {
+	if !IsUserAdmin(user) {
 		log.Println("User", user.Username, "is not admin!")
 		rw.WriteHeader(http.StatusBadRequest)
 		return
@@ -131,10 +130,10 @@ func DeleteHandler(rw http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	t := restdb.FindUserID(intID)
+	t := FindUserID(intID)
 	if t.Username != "" {
 		log.Println("About to delete:", t)
-		deleted := restdb.DeleteUser(intID)
+		deleted := DeleteUser(intID)
 		if deleted {
 			log.Println("User deleted:", id)
 			rw.WriteHeader(http.StatusOK)
@@ -163,7 +162,7 @@ func GetAllHandler(rw http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	var user = restdb.User{}
+	var user = User{}
 	err = json.Unmarshal(d, &user)
 	if err != nil {
 		log.Println(err)
@@ -171,13 +170,13 @@ func GetAllHandler(rw http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if !restdb.IsUserAdmin(user) {
+	if !IsUserAdmin(user) {
 		log.Println("User", user, "is not an admin!")
 		rw.WriteHeader(http.StatusBadRequest)
 		return
 	}
 
-	err = SliceToJSON(restdb.ListAllUsers(), rw)
+	err = SliceToJSON(ListAllUsers(), rw)
 	if err != nil {
 		log.Println(err)
 		rw.WriteHeader(http.StatusBadRequest)
@@ -209,7 +208,7 @@ func GetIDHandler(rw http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	var user = restdb.User{}
+	var user = User{}
 	err = json.Unmarshal(d, &user)
 	if err != nil {
 		log.Println(err)
@@ -218,13 +217,13 @@ func GetIDHandler(rw http.ResponseWriter, r *http.Request) {
 	}
 
 	log.Println("Input user:", user)
-	if !restdb.IsUserAdmin(user) {
+	if !IsUserAdmin(user) {
 		log.Println("User", user.Username, "not an admin!")
 		rw.WriteHeader(http.StatusBadRequest)
 		return
 	}
 
-	t := restdb.FindUserUsername(username)
+	t := FindUserUsername(username)
 	if t.ID != 0 {
 		err := t.ToJSON(rw)
 		if err != nil {
@@ -254,7 +253,7 @@ func GetUserDataHandler(rw http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	t := restdb.FindUserID(intID)
+	t := FindUserID(intID)
 	if t.ID != 0 {
 		err := t.ToJSON(rw)
 		if err != nil {
@@ -284,7 +283,7 @@ func UpdateHandler(rw http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	var users = []restdb.User{}
+	var users = []User{}
 	err = json.Unmarshal(d, &users)
 	if err != nil {
 		log.Println(err)
@@ -292,19 +291,19 @@ func UpdateHandler(rw http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if !restdb.IsUserAdmin(users[0]) {
+	if !IsUserAdmin(users[0]) {
 		log.Println("Command issued by non-admin user:", users[0].Username)
 		rw.WriteHeader(http.StatusBadRequest)
 		return
 	}
 
 	log.Println(users)
-	t := restdb.FindUserUsername(users[1].Username)
+	t := FindUserUsername(users[1].Username)
 	t.Username = users[1].Username
 	t.Password = users[1].Password
 	t.Admin = users[1].Admin
 
-	if !restdb.UpdateUser(t) {
+	if !UpdateUser(t) {
 		log.Println("Update failed:", t)
 		rw.WriteHeader(http.StatusBadRequest)
 		return
@@ -331,7 +330,7 @@ func LoginHandler(rw http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	var user = restdb.User{}
+	var user = User{}
 	err = json.Unmarshal(d, &user)
 	if err != nil {
 		log.Println(err)
@@ -341,18 +340,18 @@ func LoginHandler(rw http.ResponseWriter, r *http.Request) {
 
 	log.Println("Input user:", user)
 
-	if !restdb.IsUserValid(user) {
+	if !IsUserValid(user) {
 		log.Println("User", user.Username, "not valid!")
 		rw.WriteHeader(http.StatusBadRequest)
 		return
 	}
 
-	t := restdb.FindUserUsername(user.Username)
+	t := FindUserUsername(user.Username)
 	log.Println("Logging in:", t)
 
 	t.LastLogin = time.Now().Unix()
 	t.Active = 1
-	if restdb.UpdateUser(t) {
+	if UpdateUser(t) {
 		log.Println("User updated:", t)
 		rw.WriteHeader(http.StatusOK)
 	} else {
@@ -379,7 +378,7 @@ func LogoutHandler(rw http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	var user = restdb.User{}
+	var user = User{}
 	err = json.Unmarshal(d, &user)
 	if err != nil {
 		log.Println(err)
@@ -387,16 +386,16 @@ func LogoutHandler(rw http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if !restdb.IsUserValid(user) {
+	if !IsUserValid(user) {
 		log.Println("User", user.Username, "exists!")
 		rw.WriteHeader(http.StatusBadRequest)
 		return
 	}
 
-	t := restdb.FindUserUsername(user.Username)
+	t := FindUserUsername(user.Username)
 	log.Println("Logging out:", t.Username)
 	t.Active = 0
-	if restdb.UpdateUser(t) {
+	if UpdateUser(t) {
 		log.Println("User updated:", t)
 		rw.WriteHeader(http.StatusOK)
 	} else {
@@ -408,7 +407,7 @@ func LogoutHandler(rw http.ResponseWriter, r *http.Request) {
 // LoggedUsersHandler returns the list of all logged in users
 func LoggedUsersHandler(rw http.ResponseWriter, r *http.Request) {
 	log.Println("LoggedUsersHandler Serving:", r.URL.Path, "from", r.Host)
-	var user = restdb.User{}
+	var user = User{}
 	err := user.FromJSON(r.Body)
 
 	if err != nil {
@@ -417,13 +416,13 @@ func LoggedUsersHandler(rw http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if !restdb.IsUserValid(user) {
+	if !IsUserValid(user) {
 		log.Println("User", user.Username, "exists!")
 		rw.WriteHeader(http.StatusBadRequest)
 		return
 	}
 
-	err = SliceToJSON(restdb.ReturnLoggedUsers(), rw)
+	err = SliceToJSON(ReturnLoggedUsers(), rw)
 	if err != nil {
 		log.Println(err)
 		rw.WriteHeader(http.StatusBadRequest)

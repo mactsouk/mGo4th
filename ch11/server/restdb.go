@@ -11,17 +11,10 @@ import (
 	"io"
 	"log"
 
-	_ "github.com/lib/pq"
+	_ "github.com/mattn/go-sqlite3"
 )
 
-type User struct {
-	ID        int
-	Username  string
-	Password  string
-	LastLogin int64
-	Admin     int
-	Active    int
-}
+var Filename = "REST.db"
 
 // FromJSON decodes a serialized JSON record - User{}
 func (p *User) FromJSON(r io.Reader) error {
@@ -35,34 +28,18 @@ func (p *User) ToJSON(w io.Writer) error {
 	return e.Encode(p)
 }
 
-// PostgreSQL Connection details
-//
-// We are using localhost as hostname because both
-// the utility and PostgreSQL run on the same machine
-var (
-	Hostname = "localhost"
-	Port     = 5432
-	Username = "mtsouk"
-	Password = "pass"
-	Database = "restapi"
-)
-
-func ConnectPostgres() *sql.DB {
-	conn := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable",
-		Hostname, Port, Username, Password, Database)
-
-	db, err := sql.Open("postgres", conn)
-	if err != nil {
-		log.Println(err)
-		return nil
-	}
-
-	return db
+func OpenConnection() (*sql.DB) {
+        db, err := sql.Open("sqlite3", Filename)
+        if err != nil {
+				fmt.Println("Error connecting:", err)
+                return nil
+        }
+        return db
 }
 
 // DeleteUser is for deleting a user defined by ID
 func DeleteUser(ID int) bool {
-	db := ConnectPostgres()
+	db := OpenConnection()
 	if db == nil {
 		log.Println("Cannot connect to PostgreSQL!")
 		db.Close()
@@ -94,7 +71,7 @@ func DeleteUser(ID int) bool {
 
 // InsertUser is for adding a new user to the database
 func InsertUser(u User) bool {
-	db := ConnectPostgres()
+	db := OpenConnection()
 	if db == nil {
 		fmt.Println("Cannot connect to PostgreSQL!")
 		return false
@@ -118,7 +95,7 @@ func InsertUser(u User) bool {
 
 // ListAllUsers is for returning all users from the database table
 func ListAllUsers() []User {
-	db := ConnectPostgres()
+	db := OpenConnection()
 	if db == nil {
 		fmt.Println("Cannot connect to PostgreSQL!")
 		db.Close()
@@ -152,9 +129,9 @@ func ListAllUsers() []User {
 // This was created by mistake - the server uses
 // ReturnLoggedUsers() instead!
 func ListLogged() []User {
-	db := ConnectPostgres()
+	db := OpenConnection()
 	if db == nil {
-		fmt.Println("Cannot connect to PostgreSQL!")
+		fmt.Println("Cannot connect to SQLite!")
 		db.Close()
 		return []User{}
 	}
@@ -184,9 +161,9 @@ func ListLogged() []User {
 
 // FindUserID is for returning a user record defined by ID
 func FindUserID(ID int) User {
-	db := ConnectPostgres()
+	db := OpenConnection()
 	if db == nil {
-		fmt.Println("Cannot connect to PostgreSQL!")
+		fmt.Println("Cannot connect to SQLite!")
 		db.Close()
 		return User{}
 	}
@@ -219,7 +196,7 @@ func FindUserID(ID int) User {
 
 // FindUserUsername is for returning a user record defined by a username
 func FindUserUsername(username string) User {
-	db := ConnectPostgres()
+	db := OpenConnection()
 	if db == nil {
 		fmt.Println("Cannot connect to PostgreSQL!")
 		db.Close()
@@ -254,7 +231,7 @@ func FindUserUsername(username string) User {
 
 // ReturnLoggedUsers is for returning all logged in users
 func ReturnLoggedUsers() []User {
-	db := ConnectPostgres()
+	db := OpenConnection()
 	if db == nil {
 		fmt.Println("Cannot connect to PostgreSQL!")
 		db.Close()
@@ -292,7 +269,7 @@ func ReturnLoggedUsers() []User {
 // IsUserAdmin determines whether a user is
 // an administrator or not
 func IsUserAdmin(u User) bool {
-	db := ConnectPostgres()
+	db := OpenConnection()
 	if db == nil {
 		fmt.Println("Cannot connect to PostgreSQL!")
 		db.Close()
@@ -330,7 +307,7 @@ func IsUserAdmin(u User) bool {
 }
 
 func IsUserValid(u User) bool {
-	db := ConnectPostgres()
+	db := OpenConnection()
 	if db == nil {
 		fmt.Println("Cannot connect to PostgreSQL!")
 		db.Close()
@@ -371,7 +348,7 @@ func IsUserValid(u User) bool {
 func UpdateUser(u User) bool {
 	log.Println("Updating user:", u)
 
-	db := ConnectPostgres()
+	db := OpenConnection()
 	if db == nil {
 		fmt.Println("Cannot connect to PostgreSQL!")
 		db.Close()
