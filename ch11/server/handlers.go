@@ -14,7 +14,7 @@ import (
 
 type User struct {
 	ID        int    `json:"id"`
-	Username  string `json:"user"`
+	Username  string `json:"username"`
 	Password  string `json:"password"`
 	LastLogin int64  `json:"lastlogin"`
 	Admin     int    `json:"admin"`
@@ -162,16 +162,17 @@ func GetAllHandler(rw http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	fmt.Println("GetAllHandler:", string(d))
 	var user = User{}
 	err = json.Unmarshal(d, &user)
 	if err != nil {
-		log.Println(err)
+		log.Println("GetAllHandler:", err)
 		rw.WriteHeader(http.StatusBadRequest)
 		return
 	}
 
 	if !IsUserAdmin(user) {
-		log.Println("User", user, "is not an admin!")
+		log.Println("(GetAllHandler:) User", user, "is not an admin!")
 		rw.WriteHeader(http.StatusBadRequest)
 		return
 	}

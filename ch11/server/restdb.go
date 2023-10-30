@@ -54,7 +54,7 @@ func DeleteUser(ID int) bool {
 		return false
 	}
 
-	stmt, err := db.Prepare("DELETE FROM users WHERE ID = $1")
+	stmt, err := db.Prepare("DELETE FROM users WHERE UserID = $1")
 	if err != nil {
 		log.Println("DeleteUser:", err)
 		return false
@@ -137,7 +137,7 @@ func ListLogged() []User {
 	}
 	defer db.Close()
 
-	rows, err := db.Query("SELECT * FROM users WHERE active = 1\n")
+	rows, err := db.Query("SELECT * FROM users WHERE active = 1 \n")
 	if err != nil {
 		log.Println(err)
 		return []User{}
@@ -169,7 +169,7 @@ func FindUserID(ID int) User {
 	}
 	defer db.Close()
 
-	rows, err := db.Query("SELECT * FROM users where ID = $1\n", ID)
+	rows, err := db.Query("SELECT * FROM users where UserID = $1 \n", ID)
 	if err != nil {
 		log.Println("Query:", err)
 		return User{}
@@ -204,7 +204,7 @@ func FindUserUsername(username string) User {
 	}
 	defer db.Close()
 
-	rows, err := db.Query("SELECT * FROM users where Username = $1 \n", username)
+	rows, err := db.Query("SELECT * FROM users where username = $1 \n", username)
 	if err != nil {
 		log.Println("FindUserUsername Query:", err)
 		return User{}
@@ -239,7 +239,7 @@ func ReturnLoggedUsers() []User {
 	}
 	defer db.Close()
 
-	rows, err := db.Query("SELECT * FROM users WHERE Active = 1 \n")
+	rows, err := db.Query("SELECT * FROM users WHERE active = 1 \n")
 	if err != nil {
 		log.Println(err)
 		return []User{}
@@ -277,9 +277,10 @@ func IsUserAdmin(u User) bool {
 	}
 	defer db.Close()
 
-	rows, err := db.Query("SELECT * FROM users WHERE Username = $1 \n", u.Username)
+	statement := fmt.Sprintf(`SELECT * FROM users WHERE username = '%s'`, u.Username)
+	rows, err := db.Query(statement)
 	if err != nil {
-		log.Println(err)
+		log.Println("IsUserAdmin:", err)
 		return false
 	}
 
@@ -294,7 +295,7 @@ func IsUserAdmin(u User) bool {
 	for rows.Next() {
 		err = rows.Scan(&c1, &c2, &c3, &c4, &c5, &c6)
 		if err != nil {
-			log.Println(err)
+			log.Println("IsUserAdmin:", err)
 			return false
 		}
 		temp = User{c1, c2, c3, c4, c5, c6}
@@ -315,7 +316,7 @@ func IsUserValid(u User) bool {
 	}
 	defer db.Close()
 
-	rows, err := db.Query("SELECT * FROM users WHERE Username = $1 \n", u.Username)
+	rows, err := db.Query("SELECT * FROM users WHERE username = $1 \n", u.Username)
 	if err != nil {
 		log.Println(err)
 		return false
