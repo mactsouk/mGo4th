@@ -191,7 +191,7 @@ func GetIDHandler(rw http.ResponseWriter, r *http.Request) {
 
 	username, ok := mux.Vars(r)["username"]
 	if !ok {
-		log.Println("ID value not set!")
+		log.Println("Username value not set!")
 		rw.WriteHeader(http.StatusNotFound)
 		return
 	}
@@ -226,14 +226,17 @@ func GetIDHandler(rw http.ResponseWriter, r *http.Request) {
 
 	t := FindUserUsername(username)
 	if t.ID != 0 {
+		rw.WriteHeader(http.StatusFound)
 		err := t.ToJSON(rw)
 		if err != nil {
 			rw.WriteHeader(http.StatusBadRequest)
 			log.Println(err)
+			return
 		}
+		log.Println("GetIDHandler() terminated OK.")
 	} else {
 		rw.WriteHeader(http.StatusNotFound)
-		log.Println("User " + user.Username + "not found")
+		log.Println("User " + username + " not found!")
 	}
 }
 
