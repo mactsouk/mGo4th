@@ -16,6 +16,15 @@ import (
 
 var Filename = "REST.db"
 
+func OpenConnection() *sql.DB {
+	db, err := sql.Open("sqlite3", Filename)
+	if err != nil {
+		fmt.Println("Error connecting:", err)
+		return nil
+	}
+	return db
+}
+
 // FromJSON decodes a serialized JSON record - User{}
 func (p *User) FromJSON(r io.Reader) error {
 	e := json.NewDecoder(r)
@@ -28,20 +37,11 @@ func (p *User) ToJSON(w io.Writer) error {
 	return e.Encode(p)
 }
 
-func OpenConnection() (*sql.DB) {
-        db, err := sql.Open("sqlite3", Filename)
-        if err != nil {
-				fmt.Println("Error connecting:", err)
-                return nil
-        }
-        return db
-}
-
 // DeleteUser is for deleting a user defined by ID
 func DeleteUser(ID int) bool {
 	db := OpenConnection()
 	if db == nil {
-		log.Println("Cannot connect to PostgreSQL!")
+		log.Println("Cannot connect to SQLite3!")
 		db.Close()
 		return false
 	}
@@ -73,7 +73,7 @@ func DeleteUser(ID int) bool {
 func InsertUser(u User) bool {
 	db := OpenConnection()
 	if db == nil {
-		fmt.Println("Cannot connect to PostgreSQL!")
+		fmt.Println("Cannot connect to SQLite3!")
 		return false
 	}
 	defer db.Close()
@@ -97,7 +97,7 @@ func InsertUser(u User) bool {
 func ListAllUsers() []User {
 	db := OpenConnection()
 	if db == nil {
-		fmt.Println("Cannot connect to PostgreSQL!")
+		fmt.Println("Cannot connect to SQLite3!")
 		db.Close()
 		return []User{}
 	}
@@ -198,7 +198,7 @@ func FindUserID(ID int) User {
 func FindUserUsername(username string) User {
 	db := OpenConnection()
 	if db == nil {
-		fmt.Println("Cannot connect to PostgreSQL!")
+		fmt.Println("Cannot connect to SQLite3!")
 		db.Close()
 		return User{}
 	}
@@ -233,7 +233,7 @@ func FindUserUsername(username string) User {
 func ReturnLoggedUsers() []User {
 	db := OpenConnection()
 	if db == nil {
-		fmt.Println("Cannot connect to PostgreSQL!")
+		fmt.Println("Cannot connect to SQLite3!")
 		db.Close()
 		return []User{}
 	}
@@ -271,7 +271,7 @@ func ReturnLoggedUsers() []User {
 func IsUserAdmin(u User) bool {
 	db := OpenConnection()
 	if db == nil {
-		fmt.Println("Cannot connect to PostgreSQL!")
+		fmt.Println("Cannot connect to SQLite3!")
 		db.Close()
 		return false
 	}
@@ -309,7 +309,7 @@ func IsUserAdmin(u User) bool {
 func IsUserValid(u User) bool {
 	db := OpenConnection()
 	if db == nil {
-		fmt.Println("Cannot connect to PostgreSQL!")
+		fmt.Println("Cannot connect to SQLite3!")
 		db.Close()
 		return false
 	}
@@ -350,7 +350,7 @@ func UpdateUser(u User) bool {
 
 	db := OpenConnection()
 	if db == nil {
-		fmt.Println("Cannot connect to PostgreSQL!")
+		fmt.Println("Cannot connect to SQLite3!")
 		db.Close()
 		return false
 	}

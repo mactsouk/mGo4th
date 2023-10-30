@@ -1,4 +1,4 @@
-DROP TABLE IF EXISTS Users;
+DROP TABLE IF EXISTS users;
 
 CREATE TABLE users (
     UserID INTEGER PRIMARY KEY,
@@ -11,4 +11,3 @@ CREATE TABLE users (
 
 
 INSERT INTO users (username, password, lastlogin, admin, active) VALUES ('admin', 'admin', 1620922454, 1, 1);
-
