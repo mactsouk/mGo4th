@@ -59,7 +59,7 @@ var getidCmd = &cobra.Command{
 			return
 		}
 
-		if resp.StatusCode != http.StatusOK {
+		if resp.StatusCode != http.StatusFound {
 			fmt.Println(resp)
 			return
 		}
