@@ -1,6 +1,6 @@
 package main
 
-// Database: PostgreSQL
+// Database: SQLite3
 //
 // Functions to support the interaction with the database
 
@@ -16,6 +16,7 @@ import (
 
 var Filename = "REST.db"
 
+// Opens SQLite3 connection to be used elsewhere
 func OpenConnection() *sql.DB {
 	db, err := sql.Open("sqlite3", Filename)
 	if err != nil {
