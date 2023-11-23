@@ -25,17 +25,15 @@ func main() {
 			continue
 		}
 
+		nValues = nValues + 1
+		sum = sum + n
+
 		if initialized == 0 {
 			min = n
 			max = n
 			initialized = 1
-			nValues = nValues + 1
-			sum = sum + n
 			continue
 		}
-
-		nValues = nValues + 1
-		sum = sum + n
 
 		if n < min {
 			min = n
@@ -50,6 +48,9 @@ func main() {
 	fmt.Println("Max:", max)
 
 	// Mean value
+	if nValues == 0 {
+		return
+	}
 	meanValue := sum / float64(nValues)
 	fmt.Printf("Mean value: %.5f\n", meanValue)
 
