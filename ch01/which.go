@@ -20,16 +20,20 @@ func main() {
 		fullPath := filepath.Join(directory, file)
 		// Does it exist?
 		fileInfo, err := os.Stat(fullPath)
-		if err == nil {
-			mode := fileInfo.Mode()
-			// Is it a regular file?
-			if mode.IsRegular() {
-				// Is it executable?
-				if mode&0111 != 0 {
-					fmt.Println(fullPath)
-					return
-				}
-			}
+		if err != nil {
+			continue
+		}
+
+		mode := fileInfo.Mode()
+		// Is it a regular file?
+		if !mode.IsRegular() {
+			continue
+		}
+
+		// Is it executable?
+		if mode&0111 != 0 {
+			fmt.Println(fullPath)
+			return
 		}
 	}
 }
