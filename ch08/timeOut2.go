@@ -37,7 +37,7 @@ func main() {
 		return
 	}
 
-	duration := time.Duration(int32(t)) * time.Millisecond
+	duration := time.Duration(t) * time.Millisecond
 	fmt.Printf("Timeout period is %s\n", duration)
 
 	go timeout(duration)
