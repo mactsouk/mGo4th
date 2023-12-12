@@ -26,12 +26,12 @@ func Test_all(t *testing.T) {
 	for _, test := range tests {
 		intResult := intDiv(test.a, test.b)
 		if intResult != test.resInt {
-			t.Fatalf("Expected %d, got %d", test.resInt, intResult)
+			t.Errorf("Expected %d, got %d", test.resInt, intResult)
 		}
 
 		floatResult := floatDiv(test.a, test.b)
 		if floatResult != test.resFloat {
-			t.Fatalf("Expected %f, got %f", test.resFloat, floatResult)
+			t.Errorf("Expected %f, got %f", test.resFloat, floatResult)
 		}
 	}
 }
