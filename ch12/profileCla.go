@@ -53,6 +53,7 @@ func N2(n int) bool {
 }
 
 func main() {
+	fmt.Println(os.TempDir())
 	cpuFilename := path.Join(os.TempDir(), "cpuProfileCla.out")
 	cpuFile, err := os.Create(cpuFilename)
 	if err != nil {
