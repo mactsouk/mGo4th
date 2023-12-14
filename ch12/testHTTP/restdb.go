@@ -359,12 +359,14 @@ func UpdateUser(u User) bool {
 	defer db.Close()
 
 	stmt, err := db.Prepare("UPDATE users SET username=$1, password=$2, admin=$3, active=$4 WHERE UserID = $5")
+	// stmt, err := db.Prepare("UPDATE users SET username=$1, password=$2, admin=$3, active=$4, lastlogin=$5 WHERE UserID = $6")
 	if err != nil {
 		log.Println("Adduser:", err)
 		return false
 	}
 
 	res, err := stmt.Exec(u.Username, u.Password, u.Admin, u.Active, u.ID)
+	// res, err := stmt.Exec(u.Username, u.Password, u.Admin, u.Active, u.LastLogin, u.ID)
 	if err != nil {
 		log.Println("UpdateUser failed:", err)
 		return false

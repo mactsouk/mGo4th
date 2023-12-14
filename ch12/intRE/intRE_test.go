@@ -4,7 +4,6 @@ import (
 	"math/rand"
 	"strconv"
 	"testing"
-	"time"
 )
 
 func random(min, max int) int {
@@ -30,8 +29,6 @@ func Test_matchInt(t *testing.T) {
 }
 
 func Test_with_random(t *testing.T) {
-	SEED := time.Now().Unix()
-	rand.Seed(SEED)
 	n := strconv.Itoa(random(-100000, 19999))
 
 	if matchInt(n) == false {
