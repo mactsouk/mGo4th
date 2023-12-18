@@ -26,3 +26,6 @@ sqlite06/
 go.mod
 go.sum
 
+grafana_data
+prometheus_data
+
