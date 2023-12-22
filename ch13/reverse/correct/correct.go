@@ -1,12 +1,14 @@
 package main
 
+// This version works correctly
+
 import (
 	"fmt"
 )
 
-func R1(s string) []byte {
-	sAr := []byte(s)
-	rev := make([]byte, len(s))
+func R1(s string) []rune {
+	sAr := []rune(s)
+	rev := make([]rune, len(s))
 
 	l := len(sAr)
 	for i := 0; i < l; i++ {
@@ -17,7 +19,7 @@ func R1(s string) []byte {
 }
 
 func R2(s string) string {
-	b := []byte(s)
+	b := []rune(s)
 	for i, j := 0, len(b)-1; i < len(b)/2; i, j = i+1, j-1 {
 		b[i], b[j] = b[j], b[i]
 	}

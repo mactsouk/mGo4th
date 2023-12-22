@@ -1,5 +1,7 @@
 package main
 
+// This version has bugs
+
 import (
 	"testing"
 	"unicode/utf8"
