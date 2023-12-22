@@ -25,7 +25,7 @@ func main() {
 	fmt.Println("Frequency", CPU.Hz, "hz")
 
 	// Test if we have these specific features:
-	if CPU.Supports(SSE, SSE2) {
-		fmt.Println("We have Streaming SIMD 2 Extensions")
-	}
+	// if CPU.Supports(SSE, SSE2) {
+	// 	fmt.Println("We have Streaming SIMD 2 Extensions")
+	// }
 }
