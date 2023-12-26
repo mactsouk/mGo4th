@@ -1,21 +1,20 @@
 package main
 
-// This version has bugs
-
 import (
 	"testing"
 	"unicode/utf8"
 )
 
 func TestR1(t *testing.T) {
-	testcases := []struct {
+	testCases := []struct {
 		in, want string
 	}{
 		{" ", " "},
 		{"!12345@", "@54321!"},
 		{"Mastering Go", "oG gniretsaM"},
 	}
-	for _, tc := range testcases {
+
+	for _, tc := range testCases {
 		rev := R1(tc.in)
 		if string(rev) != tc.want {
 			t.Errorf("Reverse: %q, want %q", rev, tc.want)
@@ -24,14 +23,14 @@ func TestR1(t *testing.T) {
 }
 
 func TestR2(t *testing.T) {
-	testcases := []struct {
+	testCases := []struct {
 		in, want string
 	}{
 		{" ", " "},
 		{"!12345@", "@54321!"},
 		{"Mastering Go", "oG gniretsaM"},
 	}
-	for _, tc := range testcases {
+	for _, tc := range testCases {
 		rev := R1(tc.in)
 		if string(rev) != tc.want {
 			t.Errorf("Reverse: %q, want %q", rev, tc.want)
@@ -40,10 +39,11 @@ func TestR2(t *testing.T) {
 }
 
 func FuzzR1(f *testing.F) {
-	testcases := []string{"Hello, world", " ", "!12345"}
-	for _, tc := range testcases {
-		f.Add(tc) // Use f.Add to provide a seed corpus
+	testCases := []string{"Hello, world", " ", "!12345"}
+	for _, tc := range testCases {
+		f.Add(tc)
 	}
+
 	f.Fuzz(func(t *testing.T, orig string) {
 		rev := R1(orig)
 		doubleRev := R1(string(rev))
@@ -52,15 +52,15 @@ func FuzzR1(f *testing.F) {
 		}
 
 		if utf8.ValidString(orig) && !utf8.ValidString(string(rev)) {
-			t.Errorf("Reverse produced invalid UTF-8 string %q", rev)
+			t.Errorf("Reverse: invalid UTF-8 string %q", rev)
 		}
 	})
 }
 
 func FuzzR2(f *testing.F) {
-	testcases := []string{"Hello, world", " ", "!12345"}
-	for _, tc := range testcases {
-		f.Add(tc) // Use f.Add to provide a seed corpus
+	testCases := []string{"Hello, world", " ", "!12345"}
+	for _, tc := range testCases {
+		f.Add(tc)
 	}
 
 	f.Fuzz(func(t *testing.T, orig string) {
@@ -71,7 +71,7 @@ func FuzzR2(f *testing.F) {
 		}
 
 		if utf8.ValidString(orig) && !utf8.ValidString(rev) {
-			t.Errorf("Reverse produced invalid UTF-8 string %q", rev)
+			t.Errorf("Reverse: invalid UTF-8 string %q", rev)
 		}
 	})
 }
