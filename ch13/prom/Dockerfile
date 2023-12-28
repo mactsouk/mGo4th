@@ -2,6 +2,9 @@
 # docker run -it -p 1234:1234 goapp
 # WITH Go Modules
 
+# If you are using docker buildx, use:
+# docker buildx build -f Dockerfile -t goapp .
+
 FROM golang:alpine AS builder
 
 # Install git.
