@@ -42,8 +42,6 @@ var summary = prometheus.NewSummary(
 	})
 
 func main() {
-	rand.Seed(time.Now().Unix())
-
 	prometheus.MustRegister(counter)
 	prometheus.MustRegister(gauge)
 	prometheus.MustRegister(histogram)

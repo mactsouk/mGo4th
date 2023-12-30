@@ -28,7 +28,6 @@ var n_memory = prometheus.NewGauge(
 		Help:      "Memory usage"})
 
 func main() {
-	rand.Seed(time.Now().Unix())
 	prometheus.MustRegister(n_goroutines)
 	prometheus.MustRegister(n_memory)
 
