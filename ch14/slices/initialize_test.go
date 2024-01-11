@@ -4,15 +4,16 @@ import (
 	"testing"
 )
 
+var t []int
+
 func BenchmarkNew(b *testing.B) {
 	for i := 0; i < b.N; i++ {
-		_ = InitSliceNew(i)
+		t = InitSliceNew(i)
 	}
 }
 
 func BenchmarkAppend(b *testing.B) {
-
 	for i := 0; i < b.N; i++ {
-		_ = InitSliceAppend(i)
+		t = InitSliceAppend(i)
 	}
 }
