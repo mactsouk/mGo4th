@@ -22,17 +22,13 @@ func main() {
 	Read(b)
 	fmt.Printf("5 random bytes: %v\n", b)
 
-	{
-		// random integer
-		var max int = 100
-		n := rand.N(max)
-		fmt.Println("integer n =", n)
-	}
+	// random integer
+	var max int = 100
+	n := rand.N(max)
+	fmt.Println("integer n =", n)
 
-	{
-		// random unsigned integer
-		var max uint = 100
-		n := rand.N(max)
-		fmt.Println("unsigned int n =", n)
-	}
+	// random unsigned integer
+	var uMax uint = 100
+	uN := rand.N(uMax)
+	fmt.Println("unsigned int uN =", uN)
 }

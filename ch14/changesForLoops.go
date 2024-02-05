@@ -20,4 +20,3 @@ func main() {
 	time.Sleep(time.Second)
 	fmt.Println()
 }
-
