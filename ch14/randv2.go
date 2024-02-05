@@ -18,16 +18,21 @@ func Read(p []byte) (n int, err error) {
 }
 
 func main() {
-	b := make([]byte, 5)
-	Read(b)
-	fmt.Printf("5 random bytes: %v\n", b)
+	b := make([]byte, 3)
+	nChar, err := Read(b)
+	if err != nil {
+		fmt.Println("Error:", err)
+	} else {
+		fmt.Printf("Read %d random bytes\n", nChar)
+		fmt.Printf("The 3 random bytes are: %v\n", b)
+	}
 
-	// random integer
+	// Getting a random int value
 	var max int = 100
 	n := rand.N(max)
 	fmt.Println("integer n =", n)
 
-	// random unsigned integer
+	// Getting a random uint value
 	var uMax uint = 100
 	uN := rand.N(uMax)
 	fmt.Println("unsigned int uN =", uN)
