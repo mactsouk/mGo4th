@@ -26,7 +26,7 @@ func formattedError(a, b int) error {
 func main() {
 	err := check(0, 10)
 	if err == nil {
-		fmt.Println("check() ended normally!")
+		fmt.Println("check() executed normally!")
 	} else {
 		fmt.Println(err)
 	}

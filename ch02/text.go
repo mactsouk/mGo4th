@@ -4,7 +4,7 @@ import "fmt"
 
 func main() {
 	aString := "Hello World! €"
-	fmt.Println("First character", string(aString[0]))
+	fmt.Println("First byte", string(aString[0]))
 
 	// Runes
 	// A rune

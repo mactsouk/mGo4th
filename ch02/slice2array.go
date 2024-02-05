@@ -6,17 +6,6 @@ import (
 	"fmt"
 )
 
-// func foo(a []int) int {
-// 	return a[0] + a[1] + a[2] + a[3]
-// }
-
-// This way the compiler can do bounds checking and give
-// compile time errors regarding out of range indexes
-// func bar(slice []int) int {
-// 	a := (*[3]int)(slice)
-// 	return a[0] + a[1] + a[2] + a[3]
-// }
-
 func main() {
 	// Go 1.17 feature
 	slice := make([]byte, 3)
