@@ -18,13 +18,14 @@ func Read(p []byte) (n int, err error) {
 }
 
 func main() {
-	b := make([]byte, 3)
-	nChar, err := Read(b)
+	str := make([]byte, 3)
+
+	nChar, err := Read(str)
 	if err != nil {
 		fmt.Println("Error:", err)
 	} else {
 		fmt.Printf("Read %d random bytes\n", nChar)
-		fmt.Printf("The 3 random bytes are: %v\n", b)
+		fmt.Printf("The 3 random bytes are: %v\n", str)
 	}
 
 	// Getting a random int value
