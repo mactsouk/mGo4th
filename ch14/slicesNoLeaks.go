@@ -10,8 +10,9 @@ func createSlice() []int {
 }
 
 func getValue(s []int) []int {
-	val := s[:3]
-	return val
+	returnVal := make([]int, 3)
+	copy(returnVal, s)
+	return returnVal
 }
 
 func main() {
