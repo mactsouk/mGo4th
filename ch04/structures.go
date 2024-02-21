@@ -9,11 +9,9 @@ type node[T any] struct {
 	next *node[T]
 }
 
-
 type list[T any] struct {
 	start *node[T]
 }
-
 
 func (l *list[T]) add(data T) {
 	n := node[T]{
@@ -25,12 +23,12 @@ func (l *list[T]) add(data T) {
 		l.start = &n
 		return
 	}
-	
+
 	if l.start.next == nil {
 		l.start.next = &n
 		return
 	}
-	
+
 	temp := l.start
 	l.start = l.start.next
 	l.add(data)
@@ -46,11 +44,12 @@ func main() {
 	myList.add(9)
 
 	// Print all elements
+	cur := myList.start
 	for {
-		fmt.Println("*", myList.start)
-		if myList.start == nil {
+		fmt.Println("*", cur)
+		if cur == nil {
 			break
 		}
-		myList.start = myList.start.next
+		cur = cur.next
 	}
 }
