@@ -5,6 +5,8 @@ import (
 )
 
 func Same[T comparable](a, b T) bool {
+    // or
+    // return a == b
 	if a == b {
 		return true
 	}

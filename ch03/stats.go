@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/csv"
 	"fmt"
+	"log"
 	"math"
 	"os"
 	"sort"
@@ -29,7 +30,7 @@ func readFile(filepath string) ([]float64, error) {
 	for _, line := range lines {
 		tmp, err := strconv.ParseFloat(line[0], 64)
 		if err != nil {
-			fmt.Println("Error reading:", line[0], err)
+			log.Println("Error reading:", line[0], err)
 			continue
 		}
 		values = append(values, tmp)
@@ -39,7 +40,7 @@ func readFile(filepath string) ([]float64, error) {
 }
 
 func stdDev(x []float64) (float64, float64) {
-	sum := float64(0)
+	sum := 0.0
 	for _, val := range x {
 		sum = sum + val
 	}
@@ -72,14 +73,14 @@ func normalize(data []float64, mean float64, stdDev float64) []float64 {
 
 func main() {
 	if len(os.Args) == 1 {
-		fmt.Println("Need one argument!")
+		log.Println("Need one argument!")
 		return
 	}
 
 	file := os.Args[1]
 	values, err := readFile(file)
 	if err != nil {
-		fmt.Println("Error reading:", file, err)
+		log.Println("Error reading:", file, err)
 		os.Exit(0)
 	}
 	sort.Float64s(values)

@@ -2,7 +2,7 @@ package main
 
 import (
 	"encoding/csv"
-	"fmt"
+	"log"
 	"os"
 )
 
@@ -49,7 +49,10 @@ func saveCSVFile(filepath string) error {
 	csvwriter.Comma = '\t'
 	for _, row := range myData {
 		temp := []string{row.Name, row.Surname, row.Number, row.LastAccess}
-		_ = csvwriter.Write(temp)
+		err = csvwriter.Write(temp)
+		if err != nil {
+			return err
+		}
 	}
 	csvwriter.Flush()
 	return nil
@@ -57,16 +60,16 @@ func saveCSVFile(filepath string) error {
 
 func main() {
 	if len(os.Args) != 3 {
-		fmt.Println("csvData input output!")
-		return
+		log.Println("csvData input output!")
+		os.Exit(1)
 	}
 
 	input := os.Args[1]
 	output := os.Args[2]
 	lines, err := readCSVFile(input)
 	if err != nil {
-		fmt.Println(err)
-		return
+		log.Println(err)
+		os.Exit(1)
 	}
 
 	// CSV data is read in columns - each line is a slice
@@ -78,12 +81,12 @@ func main() {
 			LastAccess: line[3],
 		}
 		myData = append(myData, temp)
-		fmt.Println(temp)
+		log.Println(temp)
 	}
 
 	err = saveCSVFile(output)
 	if err != nil {
-		fmt.Println(err)
-		return
+		log.Println(err)
+		os.Exit(1)
 	}
 }
