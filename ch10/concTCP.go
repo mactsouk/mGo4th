@@ -11,7 +11,7 @@ import (
 
 var count = 0
 
-func handleConnection(c net.Conn) {
+func handleConnection(c net.Conn, myCount int) {
 	fmt.Print(".")
 	netData, err := bufio.NewReader(c).ReadString('\n')
 	if err != nil {
@@ -26,17 +26,17 @@ func handleConnection(c net.Conn) {
 		}
 		fmt.Println(temp)
 
-		counter := "Client number: " + strconv.Itoa(count) + "\n"
+		counter := "Client number: " + strconv.Itoa(myCount) + "\n"
 		c.Write([]byte(string(counter)))
 	}
-	c.Close()
+	defer c.Close()
 }
 
 func main() {
 	arguments := os.Args
 	if len(arguments) == 1 {
 		fmt.Println("Please provide a port number!")
-		return
+		os.Exit(5)
 	}
 
 	PORT := ":" + arguments[1]
@@ -53,7 +53,7 @@ func main() {
 			fmt.Println(err)
 			return
 		}
-		go handleConnection(c)
+		go handleConnection(c, count)
 		count++
 	}
 }
