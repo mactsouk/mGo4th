@@ -4,6 +4,21 @@ import (
 	"fmt"
 )
 
+type a struct {
+	XX int
+	YY int
+}
+
+type b struct {
+	AA string
+	XX int
+}
+
+type c struct {
+	A a
+	B b
+}
+
 type IntA interface {
 	foo()
 }
@@ -21,11 +36,6 @@ func processA(s IntA) {
 	fmt.Printf("%T\n", s)
 }
 
-type a struct {
-	XX int
-	YY int
-}
-
 // Satisfying IntA
 func (varC c) foo() {
 	fmt.Println("Foo Processing", varC)
@@ -34,17 +44,6 @@ func (varC c) foo() {
 // Satisfying IntB
 func (varC c) bar() {
 	fmt.Println("Bar Processing", varC)
-}
-
-type b struct {
-	AA string
-	XX int
-}
-
-// Structure c has two fields
-type c struct {
-	A a
-	B b
 }
 
 // Structure compose gets the fields of structure a

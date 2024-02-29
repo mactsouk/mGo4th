@@ -63,7 +63,7 @@ func insertHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("Path:", paramStr)
 
 	if len(paramStr) < 4 {
-		w.WriteHeader(http.StatusNotFound)
+		w.WriteHeader(http.StatusBadRequest)
 		fmt.Fprintln(w, "Not enough arguments: "+r.URL.Path)
 		return
 	}

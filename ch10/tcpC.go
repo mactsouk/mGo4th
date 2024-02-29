@@ -19,11 +19,11 @@ func main() {
 	c, err := net.Dial("tcp", connect)
 	if err != nil {
 		fmt.Println(err)
-		return
+		os.Exit(5)
 	}
 
+	reader := bufio.NewReader(os.Stdin)
 	for {
-		reader := bufio.NewReader(os.Stdin)
 		fmt.Print(">> ")
 		text, _ := reader.ReadString('\n')
 		fmt.Fprintf(c, text+"\n")
