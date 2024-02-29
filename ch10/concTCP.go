@@ -13,13 +13,13 @@ var count = 0
 
 func handleConnection(c net.Conn) {
 	fmt.Print(".")
-	for {
-		netData, err := bufio.NewReader(c).ReadString('\n')
-		if err != nil {
-			fmt.Println(err)
-			return
-		}
+	netData, err := bufio.NewReader(c).ReadString('\n')
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
 
+	for {
 		temp := strings.TrimSpace(string(netData))
 		if temp == "STOP" {
 			break

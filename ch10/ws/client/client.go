@@ -13,11 +13,13 @@ import (
 	"github.com/gorilla/websocket"
 )
 
-var SERVER = ""
-var PATH = ""
-var TIMESWAIT = 0
-var TIMESWAITMAX = 5
-var in = bufio.NewReader(os.Stdin)
+var (
+	SERVER       = ""
+	PATH         = ""
+	TIMESWAIT    = 0
+	TIMESWAITMAX = 5
+	in           = bufio.NewReader(os.Stdin)
+)
 
 func getInput(input chan string) {
 	result, err := in.ReadString('\n')
