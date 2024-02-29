@@ -10,7 +10,12 @@ func returnNumber() interface{} {
 
 func main() {
 	anInt := returnNumber()
-	number := anInt.(int)
+	number, ok := anInt.(int)
+	if ok {
+		fmt.Println("Type assertion successful: ", number)
+	} else {
+		fmt.Println("Type assertion failed!")
+	}
 	number++
 	fmt.Println(number)
 

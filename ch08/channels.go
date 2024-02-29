@@ -41,7 +41,7 @@ func main() {
 	}
 
 	// Range on channels
-	// IMPORTANT: As the channel c is not closed,
+	// IMPORTANT: As the channel ch is not closed,
 	// the range loop does not exit by its own.
 	n := 0
 	for i := range ch {

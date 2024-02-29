@@ -21,12 +21,12 @@ func main() {
 	counter := atomCounter{}
 	for i := 0; i < X; i++ {
 		waitGroup.Add(1)
-		go func(no int) {
+		go func() {
 			defer waitGroup.Done()
 			for i := 0; i < Y; i++ {
 				atomic.AddInt64(&counter.val, 1)
 			}
-		}(i)
+		}()
 	}
 
 	waitGroup.Wait()

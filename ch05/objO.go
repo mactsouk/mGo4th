@@ -66,7 +66,7 @@ func main() {
 	iC.A.A()
 	iC.B.A()
 
-	// The following two statements does not work
+	// The following two statements do not work
 	// ./objO.go:71:33: mixture of field:value and value initializers
 	// iComp := compose{field1: 123, a{456, 789}}
 	// ./objO.go:75:32: cannot use promoted field a.XX in struct literal of type compose

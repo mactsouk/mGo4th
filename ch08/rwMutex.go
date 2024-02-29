@@ -26,11 +26,11 @@ func Change(pass string) {
 
 func show() {
 	defer wg.Done()
+	defer Password.RWM.RUnlock()
 	Password.RWM.RLock()
 	fmt.Println("Show function locked!")
 	time.Sleep(2 * time.Second)
 	fmt.Println("Pass value:", Password.password)
-	defer Password.RWM.RUnlock()
 }
 
 func main() {
