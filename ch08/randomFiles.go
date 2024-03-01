@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"math/rand"
 	"os"
+	"path/filepath"
 	"strconv"
 	"sync"
 )
@@ -75,11 +76,13 @@ func main() {
 	var waitGroup sync.WaitGroup
 	for i := start; i <= end; i++ {
 		waitGroup.Add(1)
-		filepath := fmt.Sprintf("%s/%s%d", path, filename, i)
-		go func(f string) {
+		// filepath := fmt.Sprintf("%s/%s%d", path, filename, i)
+
+		go func(n int) {
+			filepath := filepath.Join(path, fmt.Sprintf("%s%d", filename, n))
 			defer waitGroup.Done()
-			createFile(f)
-		}(filepath)
+			createFile(filepath)
+		}(i)
 	}
 	waitGroup.Wait()
 }
