@@ -5,10 +5,11 @@ package cmd
 
 import (
 	"encoding/json"
-	"github.com/spf13/cobra"
 	"io"
 	"log/slog"
 	"os"
+
+	"github.com/spf13/cobra"
 )
 
 type Entry struct {
@@ -51,10 +52,7 @@ func saveJSONFile(filepath string) error {
 	defer f.Close()
 
 	err = Serialize(&data, f)
-	if err != nil {
-		return err
-	}
-	return nil
+	return err
 }
 
 func readJSONFile(filepath string) error {

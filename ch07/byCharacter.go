@@ -25,7 +25,7 @@ func charByChar(file string) error {
 			}
 			break
 		} else if err != nil {
-			fmt.Printf("error reading file %s", err)
+			fmt.Printf("Error reading file %s", err)
 			return err
 		}
 

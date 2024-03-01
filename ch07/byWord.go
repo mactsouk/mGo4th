@@ -16,9 +16,9 @@ func wordByWord(file string) error {
 	defer f.Close()
 
 	r := bufio.NewReader(f)
+	re := regexp.MustCompile("[^\\s]+")
 	for {
 		line, err := r.ReadString('\n')
-		re := regexp.MustCompile("[^\\s]+")
 
 		if err == io.EOF {
 			if len(line) != 0 {
@@ -29,7 +29,7 @@ func wordByWord(file string) error {
 			}
 			break
 		} else if err != nil {
-			fmt.Printf("error reading file %s", err)
+			fmt.Printf("Error reading file %s", err)
 			return err
 		}
 
