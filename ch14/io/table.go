@@ -49,9 +49,6 @@ func Create(dst string, b, filesize int) error {
 	defer f.Close()
 
 	bwriter := bufio.NewWriterSize(f, b)
-	if err != nil {
-		return err
-	}
 
 	buf := make([]byte, 0)
 	CreateBuffer(&buf, b)

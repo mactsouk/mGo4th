@@ -15,6 +15,10 @@ type secret struct {
 }
 
 func Change(pass string) {
+	if Password == nil {
+		fmt.Println("Password is nil!")
+		return
+	}
 	fmt.Println("Change() function")
 	Password.RWM.Lock()
 	fmt.Println("Change() Locked")
