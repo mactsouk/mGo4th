@@ -162,7 +162,7 @@ const timeEndPoint = "/time"
 func main() {
 	if len(os.Args) != 2 {
 		fmt.Println("Wrong number of arguments!")
-		fmt.Println("Need: Server")
+		fmt.Println("Need: Server URL")
 		return
 	}
 	server := os.Args[1]

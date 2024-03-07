@@ -39,6 +39,5 @@ func main() {
 	fmt.Println(R1ret)
 
 	R2ret, _ := R2(str)
-	reverse := fmt.Sprintf("%s", R2ret)
-	fmt.Println(reverse)
+	fmt.Println(R2ret)
 }

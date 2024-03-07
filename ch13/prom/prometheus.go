@@ -15,21 +15,21 @@ import (
 // PORT is the TCP port number the server will listen to
 var PORT = ":1234"
 
-var n_goroutines = prometheus.NewGauge(
+var nGoroutines = prometheus.NewGauge(
 	prometheus.GaugeOpts{
 		Namespace: "packt",
 		Name:      "n_goroutines",
 		Help:      "Number of goroutines"})
 
-var n_memory = prometheus.NewGauge(
+var nMemory = prometheus.NewGauge(
 	prometheus.GaugeOpts{
 		Namespace: "packt",
 		Name:      "n_memory",
 		Help:      "Memory usage"})
 
 func main() {
-	prometheus.MustRegister(n_goroutines)
-	prometheus.MustRegister(n_memory)
+	prometheus.MustRegister(nGoroutines)
+	prometheus.MustRegister(nMemory)
 
 	const nGo = "/sched/goroutines:goroutines"
 	const nMem = "/memory/classes/heap/free:bytes"
@@ -54,8 +54,8 @@ func main() {
 			memVal := getMetric[1].Value.Uint64()
 			time.Sleep(time.Duration(rand.Intn(15)) * time.Second)
 
-			n_goroutines.Set(float64(goVal))
-			n_memory.Set(float64(memVal))
+			nGoroutines.Set(float64(goVal))
+			nMemory.Set(float64(memVal))
 		}
 	}()
 

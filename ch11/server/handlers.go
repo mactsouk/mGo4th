@@ -76,7 +76,7 @@ func AddHandler(rw http.ResponseWriter, r *http.Request) {
 	// We read two structures as an array:
 	// 1. The user issuing the command
 	// 2. The user to be added
-	var users = []User{}
+	users := []User{}
 	err = json.Unmarshal(d, &users)
 	if err != nil {
 		log.Println(err)
@@ -163,7 +163,7 @@ func GetAllHandler(rw http.ResponseWriter, r *http.Request) {
 	}
 
 	fmt.Println("GetAllHandler:", string(d))
-	var user = User{}
+	user := User{}
 	err = json.Unmarshal(d, &user)
 	if err != nil {
 		log.Println("GetAllHandler:", err)

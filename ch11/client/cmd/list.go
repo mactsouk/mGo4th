@@ -48,8 +48,12 @@ var listCmd = &cobra.Command{
 			return
 		}
 
-		var users = []User{}
-		SliceFromJSON(&users, resp.Body)
+		users := []User{}
+		err = SliceFromJSON(&users, resp.Body)
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
 		data, err := PrettyJSON(users)
 		if err != nil {
 			fmt.Println(err)

@@ -8,7 +8,7 @@ import (
 
 func R1(s string) []byte {
 	sAr := []byte(s)
-	rev := make([]byte, len(s))
+	rev := make([]byte, len(sAr))
 
 	l := len(sAr)
 	for i := 0; i < l; i++ {
@@ -30,6 +30,5 @@ func R2(s string) string {
 func main() {
 	str := "1234567890"
 	fmt.Println(string(R1(str)))
-	reverse := fmt.Sprintf("%s", R2(str))
-	fmt.Println(reverse)
+	fmt.Println(R2(str))
 }

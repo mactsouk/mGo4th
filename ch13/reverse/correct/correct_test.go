@@ -20,7 +20,7 @@ func TestR1(t *testing.T) {
 			return
 		}
 
-		if string(rev) != tc.want {
+		if rev != tc.want {
 			t.Errorf("Reverse: %q, want %q", rev, tc.want)
 		}
 	}
@@ -41,7 +41,7 @@ func TestR2(t *testing.T) {
 			return
 		}
 
-		if string(rev) != tc.want {
+		if rev != tc.want {
 			t.Errorf("Reverse: %q, want %q", rev, tc.want)
 		}
 	}
@@ -54,17 +54,17 @@ func FuzzR1(f *testing.F) {
 	}
 
 	f.Fuzz(func(t *testing.T, orig string) {
-		rev, er1 := R1(orig)
-		if er1 != nil {
+		rev, err := R1(orig)
+		if err != nil {
 			return
 		}
 
-		doubleRev, er2 := R1(rev)
-		if er2 != nil {
+		doubleRev, err := R1(rev)
+		if err != nil {
 			return
 		}
 
-		if orig != string(doubleRev) {
+		if orig != doubleRev {
 			t.Errorf("Before: %q, after: %q", orig, doubleRev)
 		}
 
@@ -81,16 +81,16 @@ func FuzzR2(f *testing.F) {
 	}
 
 	f.Fuzz(func(t *testing.T, orig string) {
-		rev, er1 := R2(orig)
-		if er1 != nil {
+		rev, err := R2(orig)
+		if err != nil {
 			return
 		}
-		doubleRev, er2 := R2(string(rev))
-		if er2 != nil {
+		doubleRev, err := R2(string(rev))
+		if err != nil {
 			return
 		}
 
-		if orig != string(doubleRev) {
+		if orig != doubleRev {
 			t.Errorf("Before: %q, after: %q", orig, doubleRev)
 		}
 
