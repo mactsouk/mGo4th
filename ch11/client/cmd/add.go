@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"os"
 	"time"
 
 	"github.com/spf13/cobra"
@@ -23,7 +24,7 @@ var addCmd = &cobra.Command{
 		err := json.Unmarshal([]byte(data), &u2)
 		if err != nil {
 			fmt.Println("Unmarshal:", err)
-			return
+			os.Exit(1)
 		}
 
 		users := []User{}

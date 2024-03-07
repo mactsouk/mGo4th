@@ -31,7 +31,7 @@ func TestR2(t *testing.T) {
 		{"Mastering Go", "oG gniretsaM"},
 	}
 	for _, tc := range testCases {
-		rev := R1(tc.in)
+		rev := R2(tc.in)
 		if string(rev) != tc.want {
 			t.Errorf("Reverse: %q, want %q", rev, tc.want)
 		}
@@ -65,8 +65,8 @@ func FuzzR2(f *testing.F) {
 
 	f.Fuzz(func(t *testing.T, orig string) {
 		rev := R2(orig)
-		doubleRev := R2(string(rev))
-		if orig != string(doubleRev) {
+		doubleRev := R2(rev)
+		if orig != doubleRev {
 			t.Errorf("Before: %q, after: %q", orig, doubleRev)
 		}
 

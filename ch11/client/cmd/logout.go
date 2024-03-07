@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"fmt"
 	"net/http"
+	"os"
 	"time"
 
 	"github.com/spf13/cobra"
@@ -22,7 +23,7 @@ var logoutCmd = &cobra.Command{
 		err := user.ToJSON(buf)
 		if err != nil {
 			fmt.Println(err)
-			return
+			os.Exit(1)
 		}
 
 		req, err := http.NewRequest(http.MethodPost, SERVER+PORT+endpoint, buf)

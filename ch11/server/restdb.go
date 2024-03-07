@@ -43,7 +43,6 @@ func DeleteUser(ID int) bool {
 	db := OpenConnection()
 	if db == nil {
 		log.Println("Cannot connect to SQLite3!")
-		db.Close()
 		return false
 	}
 	defer db.Close()
@@ -99,7 +98,6 @@ func ListAllUsers() []User {
 	db := OpenConnection()
 	if db == nil {
 		fmt.Println("Cannot connect to SQLite3!")
-		db.Close()
 		return []User{}
 	}
 	defer db.Close()
@@ -133,7 +131,6 @@ func ListLogged() []User {
 	db := OpenConnection()
 	if db == nil {
 		fmt.Println("Cannot connect to SQLite!")
-		db.Close()
 		return []User{}
 	}
 	defer db.Close()
@@ -165,7 +162,6 @@ func FindUserID(ID int) User {
 	db := OpenConnection()
 	if db == nil {
 		fmt.Println("Cannot connect to SQLite!")
-		db.Close()
 		return User{}
 	}
 	defer db.Close()
@@ -200,7 +196,6 @@ func FindUserUsername(username string) User {
 	db := OpenConnection()
 	if db == nil {
 		fmt.Println("Cannot connect to SQLite3!")
-		db.Close()
 		return User{}
 	}
 	defer db.Close()
@@ -235,7 +230,6 @@ func ReturnLoggedUsers() []User {
 	db := OpenConnection()
 	if db == nil {
 		fmt.Println("Cannot connect to SQLite3!")
-		db.Close()
 		return []User{}
 	}
 	defer db.Close()
@@ -273,7 +267,6 @@ func IsUserAdmin(u User) bool {
 	db := OpenConnection()
 	if db == nil {
 		fmt.Println("Cannot connect to SQLite3!")
-		db.Close()
 		return false
 	}
 	defer db.Close()
@@ -312,7 +305,6 @@ func IsUserValid(u User) bool {
 	db := OpenConnection()
 	if db == nil {
 		fmt.Println("Cannot connect to SQLite3!")
-		db.Close()
 		return false
 	}
 	defer db.Close()
@@ -353,7 +345,6 @@ func UpdateUser(u User) bool {
 	db := OpenConnection()
 	if db == nil {
 		fmt.Println("Cannot connect to SQLite3!")
-		db.Close()
 		return false
 	}
 	defer db.Close()

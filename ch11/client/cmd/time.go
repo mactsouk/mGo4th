@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"os"
 	"time"
 
 	"github.com/spf13/cobra"
@@ -17,7 +18,7 @@ var timeCmd = &cobra.Command{
 		req, err := http.NewRequest("GET", SERVER+PORT+"/time", nil)
 		if err != nil {
 			fmt.Println("Timefunction – Error in req: ", err)
-			return
+			os.Exit(1)
 		}
 
 		c := &http.Client{
@@ -27,7 +28,7 @@ var timeCmd = &cobra.Command{
 		resp, err := c.Do(req)
 		if err != nil {
 			fmt.Println(err)
-			return
+			os.Exit(1)
 		}
 
 		if resp == nil || (resp.StatusCode == http.StatusNotFound) {

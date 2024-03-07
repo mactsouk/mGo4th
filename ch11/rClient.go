@@ -23,7 +23,7 @@ func deleteEndpoint(server string, user User) int {
 	userMarshall, _ := json.Marshal(user)
 	u := bytes.NewReader(userMarshall)
 
-	req, err := http.NewRequest("DELETE", server+deleteEndPoint, u)
+	req, err := http.NewRequest(http.MethodDelete, server+deleteEndPoint, u)
 	if err != nil {
 		fmt.Println("Error in req: ", err)
 		return http.StatusInternalServerError
@@ -168,59 +168,59 @@ func main() {
 	server := os.Args[1]
 
 	fmt.Println("/add")
-	HTTPcode := addEndpoint(server, u1)
-	if HTTPcode != http.StatusOK {
-		fmt.Println("u1 Return code:", HTTPcode)
+	httpCode := addEndpoint(server, u1)
+	if httpCode != http.StatusOK {
+		fmt.Println("u1 Return code:", httpCode)
 	} else {
-		fmt.Println("u1 Data added:", u1, HTTPcode)
+		fmt.Println("u1 Data added:", u1, httpCode)
 	}
 
-	HTTPcode = addEndpoint(server, u2)
-	if HTTPcode != http.StatusOK {
-		fmt.Println("u2 Return code:", HTTPcode)
+	httpCode = addEndpoint(server, u2)
+	if httpCode != http.StatusOK {
+		fmt.Println("u2 Return code:", httpCode)
 	} else {
-		fmt.Println("u2 Data added:", u2, HTTPcode)
+		fmt.Println("u2 Data added:", u2, httpCode)
 	}
 
-	HTTPcode = addEndpoint(server, u3)
-	if HTTPcode != http.StatusOK {
-		fmt.Println("u3 Return code:", HTTPcode)
+	httpCode = addEndpoint(server, u3)
+	if httpCode != http.StatusOK {
+		fmt.Println("u3 Return code:", httpCode)
 	} else {
-		fmt.Println("u3 Data added:", u3, HTTPcode)
+		fmt.Println("u3 Data added:", u3, httpCode)
 	}
 
 	fmt.Println("/get")
-	HTTPcode = getEndpoint(server, u1)
-	fmt.Println("/get u1 return code:", HTTPcode)
-	HTTPcode = getEndpoint(server, u2)
-	fmt.Println("/get u2 return code:", HTTPcode)
-	HTTPcode = getEndpoint(server, u3)
-	fmt.Println("/get u3 return code:", HTTPcode)
+	httpCode = getEndpoint(server, u1)
+	fmt.Println("/get u1 return code:", httpCode)
+	httpCode = getEndpoint(server, u2)
+	fmt.Println("/get u2 return code:", httpCode)
+	httpCode = getEndpoint(server, u3)
+	fmt.Println("/get u3 return code:", httpCode)
 
 	fmt.Println("/delete")
-	HTTPcode = deleteEndpoint(server, u1)
-	fmt.Println("/delete u1 return code:", HTTPcode)
-	HTTPcode = deleteEndpoint(server, u1)
-	fmt.Println("/delete u1 return code:", HTTPcode)
-	HTTPcode = deleteEndpoint(server, u2)
-	fmt.Println("/delete u2 return code:", HTTPcode)
-	HTTPcode = deleteEndpoint(server, u3)
-	fmt.Println("/delete u3 return code:", HTTPcode)
+	httpCode = deleteEndpoint(server, u1)
+	fmt.Println("/delete u1 return code:", httpCode)
+	httpCode = deleteEndpoint(server, u1)
+	fmt.Println("/delete u1 return code:", httpCode)
+	httpCode = deleteEndpoint(server, u2)
+	fmt.Println("/delete u2 return code:", httpCode)
+	httpCode = deleteEndpoint(server, u3)
+	fmt.Println("/delete u3 return code:", httpCode)
 
 	fmt.Println("/time")
-	HTTPcode, myTime := timeEndpoint(server)
-	fmt.Print("/time returned: ", HTTPcode, " ", myTime)
+	httpCode, myTime := timeEndpoint(server)
+	fmt.Print("/time returned: ", httpCode, " ", myTime)
 	time.Sleep(time.Second)
-	HTTPcode, myTime = timeEndpoint(server)
-	fmt.Print("/time returned: ", HTTPcode, " ", myTime)
+	httpCode, myTime = timeEndpoint(server)
+	fmt.Print("/time returned: ", httpCode, " ", myTime)
 
 	fmt.Println("/")
 	URL := "/"
-	HTTPcode, response := slashEndpoint(server, URL)
-	fmt.Print("/ returned: ", HTTPcode, " with response: ", response)
+	httpCode, response := slashEndpoint(server, URL)
+	fmt.Print("/ returned: ", httpCode, " with response: ", response)
 
 	fmt.Println("/what")
 	URL = "/what"
-	HTTPcode, response = slashEndpoint(server, URL)
-	fmt.Print(URL, " returned: ", HTTPcode, " with response: ", response)
+	httpCode, response = slashEndpoint(server, URL)
+	fmt.Print(URL, " returned: ", httpCode, " with response: ", response)
 }

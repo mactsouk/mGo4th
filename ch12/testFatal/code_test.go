@@ -4,7 +4,7 @@ import (
 	"testing"
 )
 
-func Test_map(t *testing.T) {
+func TestMap(t *testing.T) {
 	key := "server"
 	server, ok := DATA[key]
 	if !ok {

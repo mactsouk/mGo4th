@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"fmt"
 	"net/http"
+	"os"
 	"time"
 
 	"github.com/spf13/cobra"
@@ -22,7 +23,7 @@ var listCmd = &cobra.Command{
 		err := user.ToJSON(buf)
 		if err != nil {
 			fmt.Println("JSON:", err)
-			return
+			os.Exit(1)
 		}
 
 		req, err := http.NewRequest(http.MethodGet, SERVER+PORT+endpoint, buf)
