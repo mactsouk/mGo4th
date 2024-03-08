@@ -7,7 +7,7 @@ import (
 	"time"
 )
 
-func Test_All(t *testing.T) {
+func TestAll(t *testing.T) {
 	go Listener()
 	time.Sleep(time.Second)
 	test_SIGUSR1()

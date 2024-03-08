@@ -1,4 +1,4 @@
-package quickT
+package quickt
 
 type Point2D struct {
 	X, Y int

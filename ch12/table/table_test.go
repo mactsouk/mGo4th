@@ -20,7 +20,7 @@ var tests = []myTest{
 	{a: 5, b: 4, resInt: 1, resFloat: 1.2},
 }
 
-func Test_all(t *testing.T) {
+func TestAll(t *testing.T) {
 	t.Parallel()
 
 	for _, test := range tests {

@@ -10,9 +10,9 @@ func random(min, max int) int {
 	return rand.Intn(max-min) + min
 }
 
-func Test_matchInt(t *testing.T) {
+func TestMatchInt(t *testing.T) {
 	if matchInt("") {
-		t.Error(`matchInt("") != true`)
+		t.Error(`matchInt("") != false`)
 	}
 
 	if matchInt("00") == false {
@@ -28,7 +28,7 @@ func Test_matchInt(t *testing.T) {
 	}
 }
 
-func Test_with_random(t *testing.T) {
+func TestWithRandom(t *testing.T) {
 	n := strconv.Itoa(random(-100000, 19999))
 
 	if matchInt(n) == false {

@@ -20,7 +20,12 @@ var u2 = User{"tsoukalos", "pass"}
 var u3 = User{"", "pass"}
 
 func deleteEndpoint(server string, user User) int {
-	userMarshall, _ := json.Marshal(user)
+	userMarshall, err := json.Marshal(user)
+	if err != nil {
+		fmt.Println("Error in req: ", err)
+		return http.StatusInternalServerError
+	}
+
 	u := bytes.NewReader(userMarshall)
 
 	req, err := http.NewRequest(http.MethodDelete, server+deleteEndPoint, u)
@@ -56,7 +61,7 @@ func getEndpoint(server string, user User) int {
 	userMarshall, _ := json.Marshal(user)
 	u := bytes.NewReader(userMarshall)
 
-	req, err := http.NewRequest("GET", server+getEndPoint, u)
+	req, err := http.NewRequest(http.MethodGet, server+getEndPoint, u)
 	if err != nil {
 		fmt.Println("Error in req: ", err)
 		return http.StatusInternalServerError

@@ -35,6 +35,8 @@ func main() {
 	r.HandleFunc("/time", timeHandler)
 	r.HandleFunc("/", myHandler)
 
+	// The following can be removed as they are being
+	// registed by default.
 	r.HandleFunc("/debug/pprof/", pprof.Index)
 	r.HandleFunc("/debug/pprof/cmdline", pprof.Cmdline)
 	r.HandleFunc("/debug/pprof/profile", pprof.Profile)
