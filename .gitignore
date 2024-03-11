@@ -28,5 +28,4 @@ go.sum
 
 grafana_data
 prometheus_data
-testdata
 
