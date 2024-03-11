@@ -23,7 +23,7 @@ func deleteEndpoint(server string, user User) int {
 	userMarshall, err := json.Marshal(user)
 	if err != nil {
 		fmt.Println("Error in req: ", err)
-		return http.StatusInternalServerError
+		return http.StatusBadRequest
 	}
 
 	u := bytes.NewReader(userMarshall)
@@ -31,7 +31,7 @@ func deleteEndpoint(server string, user User) int {
 	req, err := http.NewRequest(http.MethodDelete, server+deleteEndPoint, u)
 	if err != nil {
 		fmt.Println("Error in req: ", err)
-		return http.StatusInternalServerError
+		return http.StatusBadRequest
 	}
 	req.Header.Set("Content-Type", "application/json")
 
@@ -40,13 +40,13 @@ func deleteEndpoint(server string, user User) int {
 	}
 
 	resp, err := c.Do(req)
-	defer resp.Body.Close()
-
 	if err != nil {
 		fmt.Println("Error:", err)
 	}
+	defer resp.Body.Close()
+
 	if resp == nil {
-		return http.StatusNotFound
+		return http.StatusBadRequest
 	}
 
 	data, err := io.ReadAll(resp.Body)
@@ -58,13 +58,18 @@ func deleteEndpoint(server string, user User) int {
 }
 
 func getEndpoint(server string, user User) int {
-	userMarshall, _ := json.Marshal(user)
+	userMarshall, err := json.Marshal(user)
+	if err != nil {
+		fmt.Println("Error in unmarshalling: ", err)
+		return http.StatusBadRequest
+	}
+
 	u := bytes.NewReader(userMarshall)
 
 	req, err := http.NewRequest(http.MethodGet, server+getEndPoint, u)
 	if err != nil {
 		fmt.Println("Error in req: ", err)
-		return http.StatusInternalServerError
+		return http.StatusBadRequest
 	}
 	req.Header.Set("Content-Type", "application/json")
 
@@ -73,13 +78,13 @@ func getEndpoint(server string, user User) int {
 	}
 
 	resp, err := c.Do(req)
-	defer resp.Body.Close()
-
 	if err != nil {
 		fmt.Println("Error:", err)
 	}
+	defer resp.Body.Close()
+
 	if resp == nil {
-		return http.StatusNotFound
+		return resp.StatusCode
 	}
 
 	data, err := io.ReadAll(resp.Body)
@@ -91,13 +96,18 @@ func getEndpoint(server string, user User) int {
 }
 
 func addEndpoint(server string, user User) int {
-	userMarshall, _ := json.Marshal(user)
+	userMarshall, err := json.Marshal(user)
+	if err != nil {
+		fmt.Println("Error in unmarshalling: ", err)
+		return http.StatusBadRequest
+	}
+
 	u := bytes.NewReader(userMarshall)
 
-	req, err := http.NewRequest("POST", server+addEndPoint, u)
+	req, err := http.NewRequest(http.MethodPost, server+addEndPoint, u)
 	if err != nil {
 		fmt.Println("Error in req: ", err)
-		return http.StatusInternalServerError
+		return http.StatusBadRequest
 	}
 	req.Header.Set("Content-Type", "application/json")
 
@@ -106,20 +116,19 @@ func addEndpoint(server string, user User) int {
 	}
 
 	resp, err := c.Do(req)
-	defer resp.Body.Close()
-
 	if resp == nil || (resp.StatusCode == http.StatusNotFound) {
 		return resp.StatusCode
 	}
+	defer resp.Body.Close()
 
 	return resp.StatusCode
 }
 
 func timeEndpoint(server string) (int, string) {
-	req, err := http.NewRequest("POST", server+timeEndPoint, nil)
+	req, err := http.NewRequest(http.MethodPost, server+timeEndPoint, nil)
 	if err != nil {
 		fmt.Println("Error in req: ", err)
-		return http.StatusInternalServerError, ""
+		return http.StatusBadRequest, ""
 	}
 
 	c := &http.Client{
@@ -127,21 +136,20 @@ func timeEndpoint(server string) (int, string) {
 	}
 
 	resp, err := c.Do(req)
-	defer resp.Body.Close()
-
 	if resp == nil || (resp.StatusCode == http.StatusNotFound) {
 		return resp.StatusCode, ""
 	}
+	defer resp.Body.Close()
 
 	data, _ := io.ReadAll(resp.Body)
 	return resp.StatusCode, string(data)
 }
 
 func slashEndpoint(server, URL string) (int, string) {
-	req, err := http.NewRequest("POST", server+URL, nil)
+	req, err := http.NewRequest(http.MethodPost, server+URL, nil)
 	if err != nil {
 		fmt.Println("Error in req: ", err)
-		return http.StatusInternalServerError, ""
+		return http.StatusBadRequest, ""
 	}
 
 	c := &http.Client{
@@ -149,11 +157,10 @@ func slashEndpoint(server, URL string) (int, string) {
 	}
 
 	resp, err := c.Do(req)
-	defer resp.Body.Close()
-
 	if resp == nil {
 		return resp.StatusCode, ""
 	}
+	defer resp.Body.Close()
 
 	data, _ := io.ReadAll(resp.Body)
 	return resp.StatusCode, string(data)

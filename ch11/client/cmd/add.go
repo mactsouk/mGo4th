@@ -58,9 +58,9 @@ var addCmd = &cobra.Command{
 
 		if resp.StatusCode != http.StatusOK {
 			fmt.Println("Status code:", resp.Status)
-		} else {
-			fmt.Println("User", u2.Username, "added.")
+			return
 		}
+		fmt.Println("User", u2.Username, "added.")
 	},
 }
 

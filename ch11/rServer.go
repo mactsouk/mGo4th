@@ -39,8 +39,8 @@ func timeHandler(w http.ResponseWriter, r *http.Request) {
 func addHandler(w http.ResponseWriter, r *http.Request) {
 	log.Println("Serving:", r.URL.Path, "from", r.Host, r.Method)
 	if r.Method != http.MethodPost {
-		http.Error(w, "Error:", http.StatusMethodNotAllowed)
 		fmt.Fprintf(w, "%s\n", "Method not allowed!")
+		http.Error(w, "Error:", http.StatusMethodNotAllowed)
 		return
 	}
 
@@ -52,26 +52,25 @@ func addHandler(w http.ResponseWriter, r *http.Request) {
 
 	err = json.Unmarshal(d, &user)
 	if err != nil {
-		log.Println(err)
+		log.Println("Unmarsal:", err)
 		http.Error(w, "Error:", http.StatusBadRequest)
 		return
 	}
 
-	if user.Username != "" {
-		DATA[user.Username] = user.Password
-		log.Println(DATA)
-		w.WriteHeader(http.StatusOK)
-	} else {
+	if user.Username == "" {
 		http.Error(w, "Error:", http.StatusBadRequest)
 		return
 	}
+	DATA[user.Username] = user.Password
+	log.Println(DATA)
+	w.WriteHeader(http.StatusCreated)
 }
 
 func getHandler(w http.ResponseWriter, r *http.Request) {
 	log.Println("Serving:", r.URL.Path, "from", r.Host, r.Method)
 	if r.Method != http.MethodGet {
-		http.Error(w, "Error:", http.StatusMethodNotAllowed)
 		fmt.Fprintf(w, "%s\n", "Method not allowed!")
+		http.Error(w, "Error:", http.StatusMethodNotAllowed)
 		return
 	}
 
@@ -105,8 +104,8 @@ func getHandler(w http.ResponseWriter, r *http.Request) {
 func deleteHandler(w http.ResponseWriter, r *http.Request) {
 	log.Println("Serving:", r.URL.Path, "from", r.Host, r.Method)
 	if r.Method != http.MethodDelete {
-		http.Error(w, "Error:", http.StatusMethodNotAllowed)
 		fmt.Fprintf(w, "%s\n", "Method not allowed!")
+		http.Error(w, "Error:", http.StatusMethodNotAllowed)
 		return
 	}
 
