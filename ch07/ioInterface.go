@@ -50,7 +50,7 @@ func (s *S2) readByte() byte {
 func (s *S2) Read(p []byte) (n int, err error) {
 	if s.eof() {
 		err = io.EOF
-		return 0, nil
+		return 0, err
 	}
 
 	l := len(p)
