@@ -30,8 +30,7 @@ func main() {
 	fmt.Println("Queue:", q)
 
 	message := "Writing to RabbitMQ!"
-	err = ch.PublishWithContext("", "Go", false, false,
-		amqp.Publishing{ContentType: "text/plain", Body: []byte(message)},
+	err = ch.PublishWithContext(nil, "", "Go", false, false, amqp.Publishing{ContentType: "text/plain", Body: []byte(message)},
 	)
 
 	if err != nil {
