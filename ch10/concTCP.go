@@ -12,14 +12,17 @@ import (
 var count = 0
 
 func handleConnection(c net.Conn, myCount int) {
+	
 	fmt.Print(".")
-	netData, err := bufio.NewReader(c).ReadString('\n')
+	defer c.Close()
+
+	for {
+		
+	netData, err := bufio.NewReader(c).ReadString('\n')  // FIX: Read data INSIDE the loop so it waits for new input each time
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
-
-	for {
 		temp := strings.TrimSpace(string(netData))
 		if temp == "STOP" {
 			break
@@ -29,7 +32,6 @@ func handleConnection(c net.Conn, myCount int) {
 		counter := "Client number: " + strconv.Itoa(myCount) + "\n"
 		c.Write([]byte(string(counter)))
 	}
-	defer c.Close()
 }
 
 func main() {
