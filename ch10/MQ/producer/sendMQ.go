@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-
+	"context"   //imported to use context.Background() 
 	amqp "github.com/rabbitmq/amqp091-go"
 )
 
@@ -30,7 +30,9 @@ func main() {
 	fmt.Println("Queue:", q)
 
 	message := "Writing to RabbitMQ!"
-	err = ch.PublishWithContext(nil, "", "Go", false, false, amqp.Publishing{ContentType: "text/plain", Body: []byte(message)},
+	
+	//resolve nil pointer panic in sendMQ.go by using context.Background()
+	err = ch.PublishWithContext(context.Background(), "", "Go", false, false, amqp.Publishing{ContentType: "text/plain", Body: []byte(message)},
 	)
 
 	if err != nil {
