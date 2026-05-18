@@ -43,11 +43,11 @@ func deleteEndpoint(server string, user User) int {
 	if err != nil {
 		fmt.Println("Error:", err)
 	}
-	defer resp.Body.Close()
 
 	if resp == nil {
 		return http.StatusBadRequest
 	}
+	defer resp.Body.Close()
 
 	data, err := io.ReadAll(resp.Body)
 	fmt.Print("/delete returned: ", string(data))
@@ -80,12 +80,13 @@ func getEndpoint(server string, user User) int {
 	resp, err := c.Do(req)
 	if err != nil {
 		fmt.Println("Error:", err)
+		return http.StatusBadGateway
 	}
-	defer resp.Body.Close()
 
 	if resp == nil {
-		return resp.StatusCode
+		return http.StatusBadGateway
 	}
+	defer resp.Body.Close()
 
 	data, err := io.ReadAll(resp.Body)
 	fmt.Print("/get returned: ", string(data))
@@ -116,11 +117,15 @@ func addEndpoint(server string, user User) int {
 	}
 
 	resp, err := c.Do(req)
-	if resp == nil || (resp.StatusCode == http.StatusNotFound) {
-		return resp.StatusCode
+	if err != nil {
+		fmt.Println("do:", err)
+		return http.StatusBadGateway
 	}
 	defer resp.Body.Close()
 
+	if resp.StatusCode == http.StatusNotFound {
+		return http.StatusNotFound
+	}
 	return resp.StatusCode
 }
 
@@ -136,8 +141,9 @@ func timeEndpoint(server string) (int, string) {
 	}
 
 	resp, err := c.Do(req)
-	if resp == nil || (resp.StatusCode == http.StatusNotFound) {
-		return resp.StatusCode, ""
+	if err != nil {
+		fmt.Println("do:", err)
+		return http.StatusBadGateway, ""
 	}
 	defer resp.Body.Close()
 
@@ -158,7 +164,7 @@ func slashEndpoint(server, URL string) (int, string) {
 
 	resp, err := c.Do(req)
 	if resp == nil {
-		return resp.StatusCode, ""
+		return http.StatusBadGateway, ""
 	}
 	defer resp.Body.Close()
 
